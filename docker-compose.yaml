@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+
+  db:
+    container_name: postgres
+    image: postgres:13-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: quality
+    ports:
+      - 5432:5432
