@@ -12,14 +12,13 @@ public class TestCaseController {
 
     @GetMapping("/test-cases")
     public ResponseEntity<TestCase> findTestCaseById() {
-        TestCase mockTestCase = TestCase.builder()
-                .id_case(1L)
-                .description("some_description")
-                .tested(true)
-                .passed(false)
-                .number_of_tries(1)
-                .last_update(new Date())
-                .build();
+        TestCase mockTestCase = new TestCase();
+            mockTestCase.setId_case(1L);
+            mockTestCase.setDescription("some_description");
+            mockTestCase.setTested(true);
+            mockTestCase.setPassed(false);
+            mockTestCase.setNumber_of_tries(1);
+            mockTestCase.setLast_update(new Date());
 
         return ResponseEntity.ok(mockTestCase);
     }
