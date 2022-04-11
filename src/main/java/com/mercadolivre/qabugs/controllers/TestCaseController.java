@@ -4,16 +4,15 @@ import com.mercadolivre.qabugs.dtos.CreateTestCaseDTO;
 import com.mercadolivre.qabugs.entities.TestCase;
 import com.mercadolivre.qabugs.repositories.TestCaseRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
+@RequestMapping("/test-cases")
 public class TestCaseController {
 
     private final TestCaseRepository testCaseRepository;
@@ -22,7 +21,7 @@ public class TestCaseController {
         this.testCaseRepository = testCaseRepository;
     }
 
-    @PostMapping("/test-cases")
+    @PostMapping
     public ResponseEntity<Void> createTestCase(
             @Valid @RequestBody CreateTestCaseDTO createTestCaseDTO,
             UriComponentsBuilder uriBuilder
@@ -36,6 +35,15 @@ public class TestCaseController {
                 .toUri();
 
         return ResponseEntity.created(uri).build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<TestCase>> findTestCase(
+            @PathVariable Long id
+    ) {
+        Optional<TestCase> testCase = testCaseRepository.findById(id);
+
+        return ResponseEntity.ok(testCase);
     }
 
     @GetMapping("/ping")
