@@ -30,6 +30,7 @@ public class CreateTestCaseDTO {
         }
 
         testCase.setTested(true);
+        testCase.setPassed(passed);
 
         return testCase;
     }
