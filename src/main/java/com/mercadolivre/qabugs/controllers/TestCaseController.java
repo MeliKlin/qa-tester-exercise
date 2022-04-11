@@ -63,6 +63,23 @@ public class TestCaseController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/{id}/test")
+    public ResponseEntity<Void> testCase(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "false") Boolean passed
+    ) throws TestCaseDoesNotExists {
+        Optional<TestCase> testCase = testCaseRepository.findById(id);
+        if (testCase.isEmpty()) {
+            throw new TestCaseDoesNotExists("Teste para o id informado não foi encontrado.");
+        }
+
+        int totalTries = testCase.get().getNumber_of_tries();
+        testCase.get().setPassed(passed);
+        testCase.get().setNumber_of_tries(totalTries + 1);
+        testCaseRepository.save(testCase.get());
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTestCase(
             @PathVariable Long id
