@@ -46,6 +46,15 @@ public class TestCaseController {
         return ResponseEntity.ok(testCase);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTestCase(
+            @PathVariable Long id
+    ) {
+        testCaseRepository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/ping")
     public ResponseEntity<String> checkAppIsAlive() {
         return ResponseEntity.ok().body("pong");
