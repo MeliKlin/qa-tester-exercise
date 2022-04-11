@@ -2,6 +2,7 @@ package com.mercadolivre.qabugs.controllers;
 
 import com.mercadolivre.qabugs.dtos.CreateTestCaseDTO;
 import com.mercadolivre.qabugs.entities.TestCase;
+import com.mercadolivre.qabugs.repositories.TestCaseRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,12 @@ import java.net.URI;
 @RestController
 public class TestCaseController {
 
+    private final TestCaseRepository testCaseRepository;
+
+    public TestCaseController(TestCaseRepository testCaseRepository) {
+        this.testCaseRepository = testCaseRepository;
+    }
+
     @PostMapping("/test-cases")
     public ResponseEntity<Void> createTestCase(
             @Valid @RequestBody CreateTestCaseDTO createTestCaseDTO,
@@ -22,6 +29,7 @@ public class TestCaseController {
     ) {
         TestCase testCase = createTestCaseDTO.mountTestCase();
 
+        testCaseRepository.save(testCase);
         URI uri = uriBuilder
                 .path("/api/v1/test-cases/{id}")
                 .buildAndExpand(testCase.getId_case())
