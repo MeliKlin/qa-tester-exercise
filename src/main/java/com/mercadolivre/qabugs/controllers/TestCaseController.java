@@ -1,7 +1,9 @@
 package com.mercadolivre.qabugs.controllers;
 
 import com.mercadolivre.qabugs.dtos.CreateTestCaseDTO;
+import com.mercadolivre.qabugs.dtos.UpdateTestCaseDescriptionDTO;
 import com.mercadolivre.qabugs.entities.TestCase;
+import com.mercadolivre.qabugs.errors.TestCaseDoesNotExists;
 import com.mercadolivre.qabugs.repositories.TestCaseRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +46,21 @@ public class TestCaseController {
         Optional<TestCase> testCase = testCaseRepository.findById(id);
 
         return ResponseEntity.ok(testCase);
+    }
+
+    @PutMapping("/{id}/description")
+    public ResponseEntity<Void> updateDescription(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateTestCaseDescriptionDTO description
+    ) throws TestCaseDoesNotExists{
+        Optional<TestCase> testCase = testCaseRepository.findById(id);
+        if (testCase.isEmpty()) {
+            throw new TestCaseDoesNotExists("Teste para o id informado não foi encontrado.");
+        }
+
+        testCase.get().setDescription(description.getDescription());
+        testCaseRepository.save(testCase.get());
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
